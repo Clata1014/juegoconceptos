@@ -21,9 +21,12 @@
         textarea:focus, input[type="text"]:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
         
         /* CAJAS DE RESPUESTA CORTA (Convertidas a cajas sólidas tipo App) */
-        .line-input { border: 2px solid #cbd5e1 !important; border-radius: 6px !important; background: white !important; padding: 8px 12px !important; width: 220px !important; display: inline-block !important; font-weight: bold; color: #1e40af !important; text-align: center; font-size: 1rem;}
+        .line-input { border: 2px solid #cbd5e1 !important; border-radius: 6px !important; background: white !important; padding: 8px 12px !important; width: 220px !important; box-sizing: border-box !important; display: inline-block !important; font-weight: bold; color: #1e40af !important; text-align: center; font-size: 1rem;}
         .line-input:focus { border-color: #2563eb !important; background: #eff6ff !important;}
         
+        /* AJUSTE EXCLUSIVO PARA QUE NO SE SALGAN DE LAS TARJETAS EN PC */
+        .grid-input { width: 100% !important; max-width: 100% !important; }
+
         /* RETO SIPOC (Diseño mejorado) */
         .reto-sipoc { background: #f8fafc; padding: 25px; border-radius: 12px; border: 2px solid #cbd5e1; margin-top: 40px; }
 
@@ -158,22 +161,22 @@
                     <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center;">
                         <p style="margin-top:0; margin-bottom: 10px; font-weight:bold; color:#1e293b;">⛏️ A. Mina "El Cerrejón"</p>
                         <video src="mina de carbon.mp4" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background-color: #1e293b; pointer-events: none;" autoplay loop muted playsinline></video>
-                        <input type="text" id="q3a" name="03A_Cerrejon" class="line-input" required>
+                        <input type="text" id="q3a" name="03A_Cerrejon" class="line-input grid-input" required>
                     </div>
                     <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center;">
                         <p style="margin-top:0; margin-bottom: 10px; font-weight:bold; color:#1e293b;">🏥 B. Hospital "Pablo Tobón"</p>
                         <video src="Hospital Pablo Tobon.mp4" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background-color: #1e293b; pointer-events: none;" autoplay loop muted playsinline></video>
-                        <input type="text" id="q3b" name="03B_Hospital" class="line-input" required>
+                        <input type="text" id="q3b" name="03B_Hospital" class="line-input grid-input" required>
                     </div>
                     <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center;">
                         <p style="margin-top:0; margin-bottom: 10px; font-weight:bold; color:#1e293b;">🏍️ C. Ensambladora "Auteco"</p>
                         <video src="Ensabladora.mp4" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background-color: #1e293b; pointer-events: none;" autoplay loop muted playsinline></video>
-                        <input type="text" id="q3c" name="03C_Auteco" class="line-input" required>
+                        <input type="text" id="q3c" name="03C_Auteco" class="line-input grid-input" required>
                     </div>
                     <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center;">
                         <p style="margin-top:0; margin-bottom: 10px; font-weight:bold; color:#1e293b;">✈️ D. Aerolínea Avianca</p>
                         <video src="AerolíneaAvianca.mp4" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background-color: #1e293b; pointer-events: none;" autoplay loop muted playsinline></video>
-                        <input type="text" id="q3d" name="03D_Avianca" class="line-input" required>
+                        <input type="text" id="q3d" name="03D_Avianca" class="line-input grid-input" required>
                     </div>
                 </div>
                 
