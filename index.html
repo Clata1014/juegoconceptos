@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evaluación de Procesos Productivos</title>
     <style>
+        /* ESTILOS GLOBALES */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8fafc; color: #1e293b; padding: 15px; margin: 0; line-height: 1.6;}
         .container { max-width: 900px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
         h1 { color: #2563eb; text-align: center; border-bottom: 2px dashed #e2e8f0; padding-bottom: 10px; font-size: 1.6rem;}
@@ -15,28 +16,27 @@
         
         .pregunta-box { margin-bottom: 30px; font-size: 1.05rem;}
         
-        textarea, input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; box-sizing: border-box; font-family: inherit; font-size: 1rem; transition: border-color 0.3s;}
+        textarea, input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 1rem; transition: border-color 0.3s;}
         textarea { resize: vertical; min-height: 80px; margin-top: 5px; }
+        textarea:focus, input[type="text"]:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
         
-        /* El espacio de la raya: ________ */
-        .line-input { border: none !important; border-bottom: 2px solid #1e293b !important; border-radius: 0 !important; background: transparent !important; padding: 0 5px !important; width: 180px !important; display: inline-block !important; font-weight: bold; color: #2563eb !important; text-align: center; font-size: 1rem;}
-        .line-input:focus { outline: none; border-bottom-color: #2563eb !important; background: #eff6ff !important;}
+        /* CAJAS DE RESPUESTA CORTA (Convertidas a cajas sólidas tipo App) */
+        .line-input { border: 2px solid #cbd5e1 !important; border-radius: 6px !important; background: white !important; padding: 8px 12px !important; width: 220px !important; display: inline-block !important; font-weight: bold; color: #1e40af !important; text-align: center; font-size: 1rem;}
+        .line-input:focus { border-color: #2563eb !important; background: #eff6ff !important;}
         
+        /* RETO SIPOC (Diseño mejorado) */
+        .reto-sipoc { background: #f8fafc; padding: 25px; border-radius: 12px; border: 2px solid #cbd5e1; margin-top: 40px; }
+
         /* --- ESTILOS DEL PUNTO 6 (JUEGO DE UNIR) --- */
         .match-row { display: flex; align-items: center; justify-content: space-between; background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.04);}
         .match-desc { flex: 1; padding-right: 20px; font-weight: 500; font-size: 1.1rem; }
         
-        /* CAJA DONDE CAE LA RESPUESTA */
-        .match-slot { 
-            width: 260px; min-width: 260px; height: 260px; border: 3px dashed #94a3b8; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; background: #f8fafc; text-align: center; color: #64748b; transition: 0.2s; padding: 8px; box-sizing: border-box;
-        }
+        .match-slot { width: 260px; min-width: 260px; height: 260px; border: 3px dashed #94a3b8; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; background: #f8fafc; text-align: center; color: #64748b; transition: 0.2s; padding: 8px; box-sizing: border-box;}
         .match-slot:hover { border-color: #2563eb; background: #eff6ff; color: #2563eb; transform: scale(1.02);}
         .match-slot.filled { border: 3px solid #2563eb; background: white; color: #1e40af;}
         .match-feedback { font-size: 1.05rem; text-align: center; margin-top: 10px; font-weight: bold; display: none;}
         .match-slot .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; }
-        .match-slot img { width: 100%; height: 100%; min-height: 0; flex-grow: 1; object-fit: cover; margin-bottom: 8px; border-radius: 6px; display: block; }
-
-        /* Modal Mazo */
+        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); z-index: 1000; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box;}
         .modal-content { background: #f8fafc; width: 100%; max-width: 1000px; max-height: 95vh; border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.4);}
         .modal-header { background: #1e293b; color: white; padding: 20px; text-align: center; font-weight: bold; font-size: 1.4rem; display: flex; justify-content: space-between; align-items: center;}
@@ -44,14 +44,13 @@
         .close-btn:hover { background: #dc2626; transform: scale(1.05);}
         .modal-body { padding: 30px; overflow-y: auto; }
         
-        /* TARJETAS DEL MAZO */
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         .card { background: white; border: 3px solid #cbd5e1; border-radius: 14px; padding: 8px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 12px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; justify-content: space-between; height: 280px; box-sizing: border-box;}
         .card:hover { transform: translateY(-6px); border-color: #2563eb; box-shadow: 0 12px 25px rgba(37,99,235,0.25);}
-        .card img { width: 100%; height: 100%; min-height: 0; flex-grow: 1; object-fit: cover; border-radius: 6px; margin-bottom: 8px; display: block; }
+        
+        .card img, .match-slot img { width: 100%; height: 100%; min-height: 0; flex-grow: 1; object-fit: contain; margin-bottom: 8px; border-radius: 6px; display: block; }
         .card .title { font-weight: 900; font-size: 1.15rem; text-transform: uppercase; line-height: 1.2; color: #1e293b; padding: 4px 5px; flex-shrink: 0;}
 
-        /* ESTILOS DE RETROALIMENTACIÓN (EL SIMULADOR) */
         .retro-box { background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 10px; padding: 15px; margin-top: 15px; font-size: 0.95rem; }
         .retro-box.success { border-color: #10b981; background: #ecfdf5; }
         .retro-box.warning { border-color: #f59e0b; background: #fffbeb; }
@@ -62,7 +61,6 @@
         .bg-yellow { background: #f59e0b; }
         .bg-red { background: #ef4444; }
         
-        /* TABLA COMPARATIVA TIPO PLATAFORMA */
         .table-retro { width: 100%; border-collapse: collapse; background: white; text-align: left; margin-top: 10px; font-size: 0.95rem; }
         .table-retro th { padding: 10px; border: 1px solid #cbd5e1; background: #e2e8f0; color: #1e293b; }
         .table-retro td { padding: 10px; border: 1px solid #cbd5e1; vertical-align: middle; }
@@ -77,16 +75,34 @@
         .btn-success { background: #10b981; display: none; }
         .btn-success:hover { background: #059669; }
 
+        /* =========================================
+           VISTA CELULAR PERFECTA (Tipo App Nativa)
+           ========================================= */
         @media (max-width: 600px) { 
-            .match-row { flex-direction: column; gap: 20px; padding: 25px 15px;} 
-            .match-desc { text-align: center; font-size: 1.15rem;} 
-            .match-slot { width: 100%; max-width: 100%; height: 350px; border-width: 3px; padding: 12px;}
-            .cards-grid { grid-template-columns: 1fr; gap: 25px; }
-            .card { height: 400px; padding: 12px; border-width: 3px;}
-            .card img { margin-bottom: 12px; border-radius: 8px;}
-            .card .title { font-size: 1.6rem; word-wrap: break-word; padding-bottom: 8px;}
-            .modal-body { padding: 25px 15px; }
-            .modal-header { font-size: 1.2rem; padding: 15px;}
+            /* Quitamos los márgenes grises laterales para aprovechar 100% la pantalla */
+            body { padding: 0; background: white; } 
+            .container { padding: 15px; border-radius: 0; box-shadow: none; border: none; }
+            
+            /* Ajustamos los cuadros para que no se apachurren */
+            .reto-sipoc { padding: 15px 10px; margin-top: 25px; border-width: 1px;}
+            .config-box { padding: 15px; }
+            
+            /* Los inputs cortos (sectores, operarios) ahora ocupan todo el ancho en celular */
+            .line-input { width: 100% !important; margin-top: 10px; display: block !important;}
+            
+            /* Mazo de cartas y juego */
+            .match-row { flex-direction: column; gap: 15px; padding: 20px 15px;} 
+            .match-desc { text-align: center; font-size: 1.1rem;} 
+            .match-slot { width: 100%; max-width: 100%; height: 260px; border-width: 3px; padding: 12px;}
+            .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .card { height: 200px; padding: 10px; border-width: 2px;}
+            .card img { margin-bottom: 8px; border-radius: 6px;}
+            .card .title { font-size: 0.95rem; word-wrap: break-word; padding-bottom: 4px;}
+            
+            /* Modal / Popups */
+            .modal-body { padding: 15px; }
+            .modal-header { font-size: 1.1rem; padding: 12px;}
+            .close-btn { padding: 8px 15px; font-size: 1rem;}
             .retro-title { flex-direction: column; align-items: flex-start; gap: 8px; }
         }
     </style>
@@ -106,11 +122,10 @@
 
         <div class="config-box">
             <label>👩‍🏫 Correo Electrónico de la Profesora:</label>
-            <p style="margin: 0 0 5px 0; font-size: 0.85rem; color: #3b82f6;">Escribe aquí el correo exacto de tu profesora para enviarle los resultados.</p>
-            <input type="email" id="correoProfe" required placeholder="ejemplo@correo.com">
+            <input type="email" id="correoProfe" required placeholder="Correo del profesor...">
             
             <label>👤 Tu Nombre y Apellido:</label>
-            <input type="text" name="00_Nombre_Estudiante" required placeholder="Escribe tu nombre completo...">
+            <input type="text" name="00_Nombre_Estudiante" required placeholder="Tu nombre completo...">
         </div>
 
         <div id="panelPreguntas">
@@ -121,8 +136,8 @@
                     <video src="caso1.mp4" style="width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); pointer-events: none; background-color: #1e293b; display: block;" autoplay loop muted playsinline></video>
                 </div>
                 <p><strong>Misión:</strong><br> ¿Qué tipo de producción está usando Doña Rosa? Aplicando la historia de Henry Ford que vimos hoy, ¿qué modelo de trabajo le recomendarían que hiciera con las 5 costureras de su taller para sacar las 5.000 camisas a tiempo?</p>
-                <textarea name="01_DonaRosa" id="ans_p1" required placeholder="Responde y justifica aquí..."></textarea>
-                <div id="box-p1"></div> <!-- Caja de Retroalimentación -->
+                <textarea name="01_DonaRosa" id="ans_p1" required></textarea>
+                <div id="box-p1"></div>
             </div>
 
             <div class="pregunta-box">
@@ -131,7 +146,7 @@
                     <video src="caso 2.mp4" style="width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); pointer-events: none; background-color: #1e293b; display: block;" autoplay loop muted playsinline></video>
                 </div>
                 <p><strong>Misión:</strong><br> ¿Qué sistema de producción está usando el dueño (Empujar o Halar) y por qué está perdiendo plata? ¿Cuál es la "Cura" aplicando el modelo del supermercado de Toyota?</p>
-                <textarea name="02_Empanadas" id="ans_p2" required placeholder="Responde y justifica aquí..."></textarea>
+                <textarea name="02_Empanadas" id="ans_p2" required></textarea>
                 <div id="box-p2"></div>
             </div>
 
@@ -143,50 +158,50 @@
                     <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center;">
                         <p style="margin-top:0; margin-bottom: 10px; font-weight:bold; color:#1e293b;">⛏️ A. Mina "El Cerrejón"</p>
                         <video src="mina de carbon.mp4" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background-color: #1e293b; pointer-events: none;" autoplay loop muted playsinline></video>
-                        <input type="text" id="q3a" name="03A_Cerrejon" class="line-input" required placeholder="Escribe el Sector..." style="width: 100% !important;">
+                        <input type="text" id="q3a" name="03A_Cerrejon" class="line-input" required>
                     </div>
                     <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center;">
                         <p style="margin-top:0; margin-bottom: 10px; font-weight:bold; color:#1e293b;">🏥 B. Hospital "Pablo Tobón"</p>
                         <video src="Hospital Pablo Tobon.mp4" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background-color: #1e293b; pointer-events: none;" autoplay loop muted playsinline></video>
-                        <input type="text" id="q3b" name="03B_Hospital" class="line-input" required placeholder="Escribe el Sector..." style="width: 100% !important;">
+                        <input type="text" id="q3b" name="03B_Hospital" class="line-input" required>
                     </div>
                     <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center;">
                         <p style="margin-top:0; margin-bottom: 10px; font-weight:bold; color:#1e293b;">🏍️ C. Ensambladora "Auteco"</p>
                         <video src="Ensabladora.mp4" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background-color: #1e293b; pointer-events: none;" autoplay loop muted playsinline></video>
-                        <input type="text" id="q3c" name="03C_Auteco" class="line-input" required placeholder="Escribe el Sector..." style="width: 100% !important;">
+                        <input type="text" id="q3c" name="03C_Auteco" class="line-input" required>
                     </div>
                     <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center;">
                         <p style="margin-top:0; margin-bottom: 10px; font-weight:bold; color:#1e293b;">✈️ D. Aerolínea Avianca</p>
                         <video src="AerolíneaAvianca.mp4" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background-color: #1e293b; pointer-events: none;" autoplay loop muted playsinline></video>
-                        <input type="text" id="q3d" name="03D_Avianca" class="line-input" required placeholder="Escribe el Sector..." style="width: 100% !important;">
+                        <input type="text" id="q3d" name="03D_Avianca" class="line-input" required>
                     </div>
                 </div>
                 
                 <p>Justifiquen brevemente el porqué de cada una:</p>
-                <textarea name="03_Justificaciones" id="ans_p3_just" required placeholder="Justifica tus 4 respuestas de arriba..."></textarea>
+                <textarea name="03_Justificaciones" id="ans_p3_just" required></textarea>
                 <div id="box-p3"></div>
             </div>
 
             <div class="pregunta-box">
                 <p><strong>4. PUNTO 4: El Peligro del Inventario Oculto</strong> Un empresario les dice con orgullo: "¡Mi planta es la mejor! Tengo a los obreros trabajando tan rápido, que ya tenemos 5.000 chasis de carro soldados en la bodega, esperando a que el próximo mes nos lleguen los motores importados para poder terminarlos".</p>
                 <div style="margin: 20px auto; max-width: 500px; text-align: center;">
-                    <video src="chasis.mp4" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 10px; pointer-events: none; background-color: #1e293b;" autoplay loop muted playsinline></video>
+                    <video src="Chasis.mp4" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 10px; pointer-events: none; background-color: #1e293b;" autoplay loop muted playsinline></video>
                 </div>
                 <p><strong>Misión:</strong><br> ¿A qué tipo de inventario físico corresponden esos chasis (Materia prima, Producto en Proceso o Terminado)?</p>
-                <p>Respuesta: <input type="text" id="q4" name="04_Inventario_Tipo" class="line-input" required placeholder="Escribe aquí..."></p>
+                <p>Respuesta: <input type="text" id="q4" name="04_Inventario_Tipo" class="line-input" required></p>
                 <p>Explíquenle a ese empresario por qué tener esa bodega llena de piezas a medias NO es un orgullo, sino "plata congelada" que quiebra empresas.</p>
-                <textarea name="04_Inventario_Explicacion" id="ans_p4_just" required placeholder="Escribe tu justificación..."></textarea>
+                <textarea name="04_Inventario_Explicacion" id="ans_p4_just" required></textarea>
                 <div id="box-p4"></div>
             </div>
 
             <div class="pregunta-box">
                 <p><strong>5. PUNTO 5: El Semáforo del Desempeño (Las 3 E)</strong> Lean los siguientes tres escenarios en una fábrica donde la meta diaria es entregar 100 sillas. Identifiquen cuál operario representa la Eficacia, cuál la Eficiencia y cuál logró la Efectividad:</p>
                 
-                <p>Operario A: Entregó las 100 sillas a las 5:00 p.m., pero dejó la mesa llena de pegante derramado, botó madera al piso y dañó una máquina por coser a las carreras.<br>(Respuesta: <input type="text" id="q5a" name="05A_Operario_A" class="line-input" required placeholder="Escribe aquí..."> )</p>
+                <p>Operario A: Entregó las 100 sillas a las 5:00 p.m., pero dejó la mesa llena de pegante derramado, botó madera al piso y dañó una máquina por coser a las carreras.<br><input type="text" id="q5a" name="05A_Operario_A" class="line-input" required></p>
                 
-                <p>Operario B: Trabajó con mucha calma, no desperdició ni un solo clavo y ahorró energía eléctrica. Pero al final del día, solo logró entregar 40 sillas.<br>(Respuesta: <input type="text" id="q5b" name="05B_Operario_B" class="line-input" required placeholder="Escribe aquí..."> )</p>
+                <p>Operario B: Trabajó con mucha calma, no desperdició ni un solo clavo y ahorró energía eléctrica. Pero al final del día, solo logró entregar 40 sillas.<br><input type="text" id="q5b" name="05B_Operario_B" class="line-input" required></p>
                 
-                <p>Operario C: Entregó las 100 sillas a tiempo, manteniendo su mesa limpia y usando el material exacto sin desperdicios.<br>(Respuesta: <input type="text" id="q5c" name="05C_Operario_C" class="line-input" required placeholder="Escribe aquí..."> )</p>
+                <p>Operario C: Entregó las 100 sillas a tiempo, manteniendo su mesa limpia y usando el material exacto sin desperdicios.<br><input type="text" id="q5c" name="05C_Operario_C" class="line-input" required></p>
                 <div id="box-p5"></div>
             </div>
 
@@ -197,36 +212,36 @@
                 <div id="box-p6"></div>
             </div>
 
-            <div class="pregunta-box" style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 2px solid #cbd5e1; margin-top: 40px;">
-                <h3 style="color: #059669; font-size: 1.4rem; margin-top: 0; margin-bottom: 5px;">🧩 7. PUNTO 7: Tu Propio Sistema SIPOC (Reto de Diseño)</h3>
+            <div class="pregunta-box reto-sipoc">
+                <h3 style="color: #059669; font-size: 1.4rem; margin-top: 0; margin-bottom: 5px;">🧩 7. PUNTO 7: Tu Propio Sistema SIPOC</h3>
                 <p style="color: #475569;">Piensa en un proceso productivo de la vida real. Elige el que tú quieras y completa la cadena SIPOC con tus propias palabras.</p>
                 
                 <label style="font-weight:bold; color: #1e293b; font-size:1.1rem;">¿Cuál es el Proceso Productivo que elegiste?</label>
-                <input type="text" name="07_SIPOC_Tema_Elegido" id="sipoc_tema" required placeholder="Ejemplo: Fabricación de pupitres escolares...">
+                <input type="text" name="07_SIPOC_Tema_Elegido" id="sipoc_tema" required>
                 
                 <div style="border-left: 4px solid #ef4444; padding-left: 15px; margin-top: 25px;">
                     <label style="color: #ef4444; font-weight: bold; font-size:1.1rem;">[S] PROVEEDOR (¿Quién entrega los materiales desde afuera?)</label>
-                    <input type="text" name="08_SIPOC_S_Proveedor" id="sipoc_s" required placeholder="Ej: Las madereras, las ferreterías...">
+                    <input type="text" name="08_SIPOC_S_Proveedor" id="sipoc_s" required>
                 </div>
                 
                 <div style="border-left: 4px solid #f97316; padding-left: 15px; margin-top: 15px;">
                     <label style="color: #f97316; font-weight: bold; font-size:1.1rem;">[I] ENTRADAS (¿Qué materias primas exactas ingresan a la fábrica?)</label>
-                    <input type="text" name="09_SIPOC_I_Entradas" id="sipoc_i" required placeholder="Ej: Tablas de madera, tubos de metal...">
+                    <input type="text" name="09_SIPOC_I_Entradas" id="sipoc_i" required>
                 </div>
                 
                 <div style="border-left: 4px solid #3b82f6; padding-left: 15px; margin-top: 15px;">
                     <label style="color: #3b82f6; font-weight: bold; font-size:1.1rem;">[P] PROCESO (Escribe los pasos principales de la transformación)</label>
-                    <textarea name="10_SIPOC_P_Proceso" id="sipoc_p" required placeholder="Ej: 1. Cortar madera. 2. Soldar tubos..."></textarea>
+                    <textarea name="10_SIPOC_P_Proceso" id="sipoc_p" required></textarea>
                 </div>
                 
                 <div style="border-left: 4px solid #10b981; padding-left: 15px; margin-top: 15px;">
                     <label style="color: #10b981; font-weight: bold; font-size:1.1rem;">[O] SALIDA (¿Cuál es el producto 100% finalizado que sale por la puerta?)</label>
-                    <input type="text" name="11_SIPOC_O_Salida" id="sipoc_o" required placeholder="Ej: Un pupitre escolar terminado...">
+                    <input type="text" name="11_SIPOC_O_Salida" id="sipoc_o" required>
                 </div>
                 
                 <div style="border-left: 4px solid #8b5cf6; padding-left: 15px; margin-top: 15px;">
                     <label style="color: #8b5cf6; font-weight: bold; font-size:1.1rem;">[C] CLIENTE (¿Quién compra o recibe ese resultado final?)</label>
-                    <input type="text" name="12_SIPOC_C_Cliente" id="sipoc_c" required placeholder="Ej: Las escuelas, los estudiantes...">
+                    <input type="text" name="12_SIPOC_C_Cliente" id="sipoc_c" required>
                 </div>
                 <div id="box-p7"></div>
             </div>
@@ -288,18 +303,6 @@
         { nombre: 'TIEMPO MUERTO', archivo: 'tiempo muerto' }
     ];
 
-    function intentarOtrosFormatos(img, nombreBase) {
-        if (!img.dataset.intentos) { img.dataset.intentos = 0; }
-        let intentos = parseInt(img.dataset.intentos);
-        const formatos = ['.jpg', '.jpeg', '.webp', '.svg', '.gif'];
-        if (intentos < formatos.length) {
-            img.src = nombreBase + formatos[intentos];
-            img.dataset.intentos = intentos + 1;
-        } else {
-            img.outerHTML = '<div style="font-size:120px; display:flex; align-items:center; justify-content:center; flex-grow:1; width:100%; margin-bottom:15px; color:#cbd5e1; line-height:1;">🖼️</div>';
-        }
-    }
-
     const container = document.getElementById('matching-container');
     conceptos.sort(() => Math.random() - 0.5).forEach((c, i) => {
         container.innerHTML += `
@@ -330,7 +333,7 @@
         mazoRevuelta.forEach(carta => {
             contenedor.innerHTML += `
                 <div class="card" onclick="seleccionarCarta('${carta.nombre}', '${carta.archivo}')">
-                    <img src="${carta.archivo}.png" alt="" onerror="intentarOtrosFormatos(this, '${carta.archivo}')">
+                    <img src="${carta.archivo}.webp" onerror="this.onerror=null; this.src='${carta.archivo}.png';" alt="${carta.nombre}">
                     <div class="title">${carta.nombre}</div>
                 </div>
             `;
@@ -347,7 +350,7 @@
     function seleccionarCarta(nombre, archivo) {
         const slot = document.getElementById('slot_' + slotActual);
         slot.innerHTML = `
-            <img src="${archivo}.png" alt="" onerror="intentarOtrosFormatos(this, '${archivo}')">
+            <img src="${archivo}.webp" onerror="this.onerror=null; this.src='${archivo}.png';" alt="${nombre}">
             <div style="font-size:1.3rem; line-height:1.2; font-weight:900; color:#1e293b; flex-shrink:0; padding-bottom:4px;">${nombre}</div>
         `;
         slot.classList.add('filled');
@@ -378,7 +381,6 @@
         if(e.target.name) localStorage.setItem(e.target.name, e.target.value); 
     });
 
-    // NUEVA FUNCIÓN QUE GENERA FILAS DE TABLA EN VEZ DE LISTAS
     function formatoFila(label, respuestaEstudiante, solucionEsperada, esCorrecto) {
         let icono = esCorrecto ? "✅" : "❌";
         let claseEstudiante = esCorrecto ? "td-correct" : "td-incorrect";
@@ -394,7 +396,6 @@
         `;
     }
 
-    // NUEVA ESTRUCTURA DE TABLA EN LA RETROALIMENTACIÓN
     function crearRetro(boxId, maxPts, obtenidos, htmlDetalle, txtExplicacion) {
         let box = document.getElementById(boxId);
         let pct = maxPts > 0 ? (obtenidos / maxPts) : 0;
@@ -434,7 +435,6 @@
     }
 
     function norm(str) { return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim(); }
-
     function esTextoLogico(texto) {
         texto = texto.trim();
         if (texto.length < 3) return false;
@@ -442,7 +442,6 @@
         if (/(.)\1{3,}/.test(texto)) return false; 
         return true;
     }
-
     function esParrafoLogico(texto) {
         if (!esTextoLogico(texto)) return false;
         if (texto.trim().split(/\s+/).length < 2) return false; 
@@ -459,7 +458,6 @@
 
         let total = 0;
 
-        // PUNTO 1 (Max 5 pts)
         let v1 = document.getElementById('ans_p1').value;
         let p1 = 0; let v1n = norm(v1);
         let val1 = esParrafoLogico(v1);
@@ -472,7 +470,6 @@
         let p1Detalle = formatoFila("Tu Análisis", v1, "Doña Rosa usa Producción por Proyectos / Artesanal y debe pasar a Producción en Masa con División del Trabajo.", val1 && p1 >= 3);
         crearRetro('box-p1', 5, p1, p1Detalle, "En el modelo Artesanal una sola persona hace todo de cero a cien. Henry Ford demostró que dividiendo las tareas (uno corta, otro cose, otro plancha) la producción se multiplica.");
 
-        // PUNTO 2 (Max 5 pts)
         let v2 = document.getElementById('ans_p2').value;
         let p2 = 0; let v2n = norm(v2);
         let val2 = esParrafoLogico(v2);
@@ -485,7 +482,6 @@
         let p2Detalle = formatoFila("Tu Análisis", v2, "El dueño usa el Sistema PUSH (Empujar) y la cura es el Sistema PULL (Halar) o Just in Time.", val2 && p2 >= 3);
         crearRetro('box-p2', 5, p2, p2Detalle, "El dueño produce a ciegas y desperdicia recursos. La cura de Toyota es solo freír cuando el cliente ya pagó y ordenó la comida.");
 
-        // PUNTO 3 (Max 5 pts)
         let p3 = 0;
         let c3 = [{id:'q3a', a:'primario', l:'A. Mina Cerrejón'}, {id:'q3b', a:'terciario', l:'B. Hospital'}, {id:'q3c', a:'secundario', l:'C. Ensambladora'}, {id:'q3d', a:'terciario', l:'D. Aerolínea'}];
         let p3Detalle = "";
@@ -496,7 +492,6 @@
             else { el.style.borderColor = "#ef4444"; }
             p3Detalle += formatoFila(c.l, el.value, c.a.charAt(0).toUpperCase() + c.a.slice(1), esCorrecto);
         });
-        
         let v3j = document.getElementById('ans_p3_just').value;
         let val3j = esParrafoLogico(v3j);
         if(val3j) { p3 += 1; }
@@ -504,7 +499,6 @@
         total += p3;
         crearRetro('box-p3', 5, p3, p3Detalle, "La Mina es <b>Primario</b> (Extrae naturaleza). El Hospital y Avianca son <b>Terciarios</b> (Prestan servicios). La Ensambladora es <b>Secundario</b> (Manufactura).");
 
-        // PUNTO 4 (Max 5 pts)
         let p4 = 0; let i4 = document.getElementById('q4'); let p4Detalle = "";
         let esCorrecto4 = norm(i4.value).includes('proceso') || norm(i4.value).includes('wip');
         if(esCorrecto4) { p4 += 2; i4.style.borderColor = "#10b981"; } 
@@ -517,7 +511,6 @@
         total += p4;
         crearRetro('box-p4', 5, p4, p4Detalle, "Tener bodegas llenas de piezas a medias es terrible para las empresas porque es dinero estancado que no se puede recuperar vendiendo el producto.");
 
-        // PUNTO 5 (Max 3 pts)
         let p5 = 0; let p5Detalle = "";
         let c5 = [
             {id:'q5a', a:'eficacia', l:'Operario A'}, 
@@ -535,7 +528,6 @@
         total += p5;
         crearRetro('box-p5', 3, p5, p5Detalle, "El equilibrio perfecto de todo Tecnólogo es ser como el Operario C (Efectivo): alcanzar el objetivo planeado pero gastando lo menos posible.");
 
-        // PUNTO 6 (Max 14 pts)
         let p6 = 0; let p6Detalle = "";
         conceptos.forEach(c => {
             let val = document.getElementById('input_' + c.id).value;
@@ -551,14 +543,12 @@
                 feed.innerHTML = "❌ Era: " + c.respuesta; feed.style.color = "#ef4444";
             }
             feed.style.display = "block";
-            // Agregar a la tabla resumen
             let labelCorto = c.texto.substring(0, 45) + "...";
             p6Detalle += formatoFila(labelCorto, val, c.respuesta, esCorrecto);
         });
         total += p6;
         crearRetro('box-p6', 14, p6, p6Detalle, "Se evaluaron las 14 tarjetas. Mira la tabla comparativa arriba o revisa cada cuadro en el juego para ver los detalles exactos.");
 
-        // PUNTO 7 (Max 13 pts)
         let p7 = 0; 
         let sInputs = [ 
             {id: 'sipoc_tema', lbl: 'Proceso Elegido', v:2, ideal: "Ej: Preparar una hamburguesa"}, 
@@ -584,7 +574,6 @@
         p7RetroExplicacion += "Como es de respuesta libre, se muestran ejemplos de lo que debías poner si te equivocaste. <b>Tu profesora leerá tu SIPOC en el correo</b> para evaluar si realmente tiene lógica empresarial y ajustará la nota.";
         crearRetro('box-p7', 13, p7, detallesP7, p7RetroExplicacion);
 
-        // TOTAL FINAL
         let notaReal = (total / 10).toFixed(1);
         let finalBox = document.getElementById('finalScoreBox');
         finalBox.innerHTML = `
